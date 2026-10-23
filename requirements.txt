@@ -1,0 +1,22 @@
+# Runtime - pinned to the versions the test-suite was run against
+pymupdf==1.28.2
+pdfplumber==0.11.9
+chromadb==1.5.9
+sqlalchemy==2.1.3
+pydantic==2.13.5
+fastapi==0.142.2
+uvicorn==0.54.0
+python-multipart==0.0.32
+streamlit==1.65.0
+requests==2.33.1
+pandas==3.0.2
+networkx==3.6.1
+pyvis==0.3.2
+rapidfuzz==3.14.6
+numpy==2.4.4
+# Real embeddings (BGE/E5). NOT pinned: could not be installed/tested in the build sandbox (PyTorch is large).
+# Without it set EMBEDDING_BACKEND=hash (offline lexical fallback, much weaker retrieval).
+sentence-transformers>=3.0,<6
+# Optional OCR for scanned pages (also needs the Tesseract binary: apt install tesseract-ocr)
+# pytesseract
+# pillow

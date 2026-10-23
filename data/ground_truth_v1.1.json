@@ -1,0 +1,170 @@
+{
+  "components": [
+    "DoorLockManager",
+    "WindowController",
+    "LightingController",
+    "PowerManager",
+    "DiagnosticHandler",
+    "ComSignalRouter",
+    "RainSensorHandler"
+  ],
+  "interfaces": [
+    "IDoorLock",
+    "IWindowCtrl",
+    "ILightCtrl",
+    "IPowerState",
+    "IDiagService",
+    "ISignalRoute",
+    "IRainStatus"
+  ],
+  "ports": [
+    {
+      "component": "DoorLockManager",
+      "name": "DoorLockCmd",
+      "direction": "provided",
+      "interface": "IDoorLock"
+    },
+    {
+      "component": "DoorLockManager",
+      "name": "PowerStatePort",
+      "direction": "required",
+      "interface": "IPowerState"
+    },
+    {
+      "component": "WindowController",
+      "name": "WindowCmd",
+      "direction": "provided",
+      "interface": "IWindowCtrl"
+    },
+    {
+      "component": "LightingController",
+      "name": "LightCmd",
+      "direction": "provided",
+      "interface": "ILightCtrl"
+    },
+    {
+      "component": "LightingController",
+      "name": "PowerStatePort",
+      "direction": "required",
+      "interface": "IPowerState"
+    },
+    {
+      "component": "PowerManager",
+      "name": "PowerStateOut",
+      "direction": "provided",
+      "interface": "IPowerState"
+    },
+    {
+      "component": "DiagnosticHandler",
+      "name": "DiagReq",
+      "direction": "provided",
+      "interface": "IDiagService"
+    },
+    {
+      "component": "DiagnosticHandler",
+      "name": "DoorLockDiag",
+      "direction": "required",
+      "interface": "IDoorLockDiag"
+    },
+    {
+      "component": "ComSignalRouter",
+      "name": "SignalOut",
+      "direction": "provided",
+      "interface": "ISignalRoute"
+    },
+    {
+      "component": "RainSensorHandler",
+      "name": "RainStatusOut",
+      "direction": "provided",
+      "interface": "IRainStatus"
+    }
+  ],
+  "signals": [
+    {
+      "name": "DoorLockStatus",
+      "sender": "DoorLockManager",
+      "receiver": "ComSignalRouter"
+    },
+    {
+      "name": "WindowPosition",
+      "sender": "WindowController",
+      "receiver": "ComSignalRouter"
+    },
+    {
+      "name": "VehSpeed",
+      "sender": "ComSignalRouter",
+      "receiver": "DoorLockManager"
+    },
+    {
+      "name": "IgnitionState",
+      "sender": "PowerManager",
+      "receiver": "ComSignalRouter"
+    },
+    {
+      "name": "LightRequest",
+      "sender": "ComSignalRouter",
+      "receiver": "LightingController"
+    },
+    {
+      "name": "DiagSessionState",
+      "sender": "DiagnosticHandler",
+      "receiver": ""
+    },
+    {
+      "name": "RainIntensity",
+      "sender": "RainSensorHandler",
+      "receiver": "WindowController"
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "DoorLockManager",
+      "to": "PowerManager",
+      "type": "service"
+    },
+    {
+      "from": "WindowController",
+      "to": "PowerManager",
+      "type": "service"
+    },
+    {
+      "from": "LightingController",
+      "to": "PowerManager",
+      "type": "service"
+    },
+    {
+      "from": "DoorLockManager",
+      "to": "ComSignalRouter",
+      "type": "data"
+    },
+    {
+      "from": "DiagnosticHandler",
+      "to": "DoorLockManager",
+      "type": "diagnostic"
+    },
+    {
+      "from": "LightingController",
+      "to": "AmbientSensorDriver",
+      "type": "data"
+    },
+    {
+      "from": "WindowController",
+      "to": "RainSensorHandler",
+      "type": "data"
+    }
+  ],
+  "planted_inconsistencies": [
+    {
+      "rule": "R001",
+      "entity": "DiagnosticHandler.DoorLockDiag"
+    },
+    {
+      "rule": "R002",
+      "entity": "DiagSessionState"
+    },
+    {
+      "rule": "R003",
+      "entity": "LightingController->AmbientSensorDriver"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+# Ollama runs on the HOST (so it can use your GPU/Metal). Containers reach it via host.docker.internal.
+services:
+  api:
+    build: .
+    environment:
+      OLLAMA_HOST: ${OLLAMA_HOST:-http://host.docker.internal:11434}
+      LLM_MODEL: ${LLM_MODEL:-qwen2.5:7b}
+      MOCK_LLM: ${MOCK_LLM:-0}
+      EMBEDDING_BACKEND: ${EMBEDDING_BACKEND:-st}
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-BAAI/bge-small-en-v1.5}
+      DATA_DIR: /data
+    extra_hosts: ["host.docker.internal:host-gateway"]   # needed on Linux
+    volumes: ["hld_data:/data"]
+    ports: ["8000:8000"]
+  ui:
+    build: .
+    command: ["streamlit", "run", "ui/streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+    environment:
+      API_BASE_URL: http://api:8000
+    depends_on: [api]
+    ports: ["8501:8501"]
+volumes:
+  hld_data:
